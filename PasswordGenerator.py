@@ -11,14 +11,26 @@ alph_upper = [letter.upper() for letter in alph_lower]
 
 special_char = ['!','@','#','$','%','&']
 
-def GeneratePassword() -> str:
+def GeneratePassword(length) -> str:
     """Generates a random string 10 characters long"""
+
+    #converts input string to int type
+    try:
+        length = int(length)
+    except ValueError as e:
+        return f'{e}\nPassword length must be a number'
+    except Exception as e:
+        return f'Unexpected error:\n{e}'
+    
+    #checks that length is between 8 and 16
+    if length < 8 or length > 16:
+        raise ValueError('Password length must be between 8 and 16')
 
     #define password as empty string
     password = ''
 
     #loops until password is desired length
-    while len(password) < 10:
+    while len(password) < length:
 
         #chooses random list of characters to pull from
         rand_list = random.choice([1,2,3])
@@ -49,6 +61,5 @@ def GeneratePassword() -> str:
     else:
         return GeneratePassword()
 
-password = GeneratePassword()
-
-print(password)
+if __name__ == '__main__':
+    print(GeneratePassword(input('Please select a password length between 8 and 16:\n')))
