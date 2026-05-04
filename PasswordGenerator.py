@@ -11,7 +11,7 @@ alph_upper = [letter.upper() for letter in alph_lower]
 
 special_char = ['!','@','#','$','%','&']
 
-def GeneratePassword(length) -> str:
+def GeneratePassword(length, num_lower, num_upper, num_special) -> str:
     """Generates a random string 10 characters long"""
 
     #converts input string to int type
@@ -21,10 +21,34 @@ def GeneratePassword(length) -> str:
         return f'{e}\nPassword length must be a number'
     except Exception as e:
         return f'Unexpected error:\n{e}'
+
+    try:
+        num_lower = int(num_lower)
+    except ValueError as e:
+        return f'{e}\nNumber of lowercase characters must be a number'
+    except Exception as e:
+        return f'Unexpected error:\n{e}'
+    
+    try:
+        num_upper = int(num_upper)
+    except ValueError as e:
+        return f'{e}\nNumber of uppercase characters must be a number'
+    except Exception as e:
+        return f'Unexpected error:\n{e}'
+    
+    try:
+        num_special = int(num_special)
+    except ValueError as e:
+        return f'{e}\nNumber of special characters must be a number'
+    except Exception as e:
+        return f'Unexpected error:\n{e}'
     
     #checks that length is between 8 and 16
     if length < 8 or length > 16:
         raise ValueError('Password length must be between 8 and 16')
+    
+    if num_lower + num_upper + num_special > length:
+        raise ValueError('The sum of lowercase, uppercase and special characters must be less than or equal to desired length')
 
     #define password as empty string
     password = ''
@@ -56,10 +80,10 @@ def GeneratePassword(length) -> str:
         if i in password:
             special_count += 1
 
-    if lower_count >= 2 and upper_count >= 2 and special_count >= 2:
+    if lower_count >= num_lower and upper_count >= num_upper and special_count >= num_special:
         return password
     else:
-        return GeneratePassword()
+        return GeneratePassword(length, num_lower, num_upper, num_special)
 
 if __name__ == '__main__':
-    print(GeneratePassword(input('Please select a password length between 8 and 16:\n')))
+    print(GeneratePassword(input('Please select a password length between 8 and 16:\n'),input('Please select a minimum number of lowercase characters:\n'),input('Please select a minimum number of uppercase characters:\n'),input('Please select a minimum number of special characters:\n')))
